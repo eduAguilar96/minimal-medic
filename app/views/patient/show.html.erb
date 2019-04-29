@@ -1,0 +1,23 @@
+<h1><%= @patient.person.firstName + " " + @patient.person.lastName %></h1>
+<h4><%= @patient.insurance(@patient.insurancePlan) + " Insurance" %></h4>
+<h4><%= "sexo: " + @patient.person.gender %></h4>
+<h4><%= "dob: " + @patient.person.dob %></h4>
+<h4><%= "PersonId: " + @patient.person.id %></h4>
+<h4><%= "PatientId: " + @patient.id %></h4>
+
+<h4>Treatments:</h4>
+<ul>
+  <% @patient.treatments.each do |treatment| %>
+
+    <li>
+      <%= "Doctor: " + treatment.doctor.person.firstName + " " + treatment.doctor.person.lastName%><br>
+      <%= "Duration: " + treatment.duration + " Days"%><br>
+      <ul>
+        <% treatments.medicaments.each do |med| %>
+          <li><%= med %></li>
+        <% end %>
+      </ul>
+      <%= treatment.description %><br>
+    </li>
+  <% end %>
+</ul>
