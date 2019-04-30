@@ -1,0 +1,9 @@
+<h4><%= link_to("<< Home", root_path)%></h4>
+<h1>Doctors</h1>
+
+<ul>
+  <% @doctors.each do |doctor| %>
+
+    <li><%= link_to(doctor.person.firstName + " " + doctor.person.lastName, doctor_path(doctor))  %></li>
+  <% end %>
+</ul>

@@ -1,0 +1,31 @@
+<h4><%= link_to("<< Doctors", doctor_index_url)%></h4>
+<h1><%= @doctor.person.firstName + " " + @doctor.person.lastName %></h1>
+<h4><%= "sexo: " + @doctor.person.gender %></h4>
+<h4><%= "dob: " + @doctor.person.dob %></h4>
+<h4>Area of work: <%= link_to(@doctor.area.name, area_path(@doctor.area))  %></h4>
+<h4>
+  Area of lead:
+  <% if @doctor.domain %>
+    <%= link_to(@doctor.domain.name, area_path(@doctor.domain))%>
+  <% end %>
+</h4>
+<h4>Salary <%= @doctor.salary%></h4>
+
+<h4>Treatments:</h4>
+<ul>
+  <% @doctor.treatments.each do |treatment| %>
+
+    <li>
+      Patient: <%= link_to(treatment.patient.person.firstName + " " + treatment.patient.person.lastName, patient_path(treatment.patient))  %><br>
+      <%= "Duration: " + treatment.duration.to_s + " Days"%><br>
+      <ul>
+        <% treatment.medicaments.each do |med| %>
+          <li><%= med %></li>
+        <% end %>
+      </ul>
+      <%= treatment.description %><br>
+    </li>
+  <% end %>
+</ul>
+<h4><%= "PersonId: " + @doctor.person.id %></h4>
+<h4><%= "PatientId: " + @doctor.id %></h4>

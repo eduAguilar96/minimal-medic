@@ -16,10 +16,10 @@ ActiveRecord::Schema.define(version: 2019_04_28_181243) do
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
-  create_table "areas", force: :cascade do |t|
+  create_table "areas", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.string "name", null: false
     t.string "location", null: false
-    t.integer "speciality", null: false
+    t.integer "specialty", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -28,10 +28,12 @@ ActiveRecord::Schema.define(version: 2019_04_28_181243) do
     t.integer "specialty", null: false
     t.integer "yearsExperience", null: false
     t.decimal "salary", precision: 64, scale: 12, null: false
-    t.uuid "areaWork"
-    t.uuid "areaLead"
+    t.uuid "domain_id"
+    t.uuid "area_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["area_id"], name: "index_doctors_on_area_id"
+    t.index ["domain_id"], name: "index_doctors_on_domain_id"
   end
 
   create_table "patients", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -46,15 +48,15 @@ ActiveRecord::Schema.define(version: 2019_04_28_181243) do
     t.string "dob"
     t.string "gender", null: false
     t.string "labor_type", null: false
-    t.bigint "labor_id", null: false
+    t.uuid "labor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["labor_type", "labor_id"], name: "index_people_on_labor_type_and_labor_id"
   end
 
   create_table "treatments", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.bigint "patient_id", null: false
-    t.bigint "doctor_id", null: false
+    t.uuid "patient_id", null: false
+    t.uuid "doctor_id", null: false
     t.integer "duration"
     t.text "medicaments", default: [], array: true
     t.string "description"

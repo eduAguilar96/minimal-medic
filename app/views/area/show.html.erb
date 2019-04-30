@@ -1,0 +1,14 @@
+<h4><%= link_to("<< Areas", area_index_url)%></h4>
+<h1><%= @area.name%></h1>
+<h4><%= @area.location%></h4>
+
+<h4>Leader: <%= link_to(@area.leader.person.firstName + " " + @area.leader.person.lastName, doctor_path(@area.leader))  %></h4>
+<h4>Doctors:</h4>
+<ul>
+  <% @area.doctors.each do |doctor| %>
+    <li>
+      Doctor: <%= link_to(doctor.person.firstName + " " + doctor.person.lastName, doctor_path(doctor))  %>
+    </li>
+  <% end %>
+</ul>
+<h4><%= "AreaId: " + @area.id %></h4>
