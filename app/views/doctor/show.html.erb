@@ -2,6 +2,7 @@
 <h1><%= @doctor.person.firstName + " " + @doctor.person.lastName %></h1>
 <h4><%= "sexo: " + @doctor.person.gender %></h4>
 <h4><%= "dob: " + @doctor.person.dob %></h4>
+<h4>Specialty: <%= @doctor.specialtyName(@doctor.specialty) %></h4>
 <h4>Area of work: <%= link_to(@doctor.area.name, area_path(@doctor.area))  %></h4>
 <h4>
   Area of lead:

@@ -268,12 +268,13 @@ end
   )
   persons.append person
 
+  specialty = specialtiesNum.sample
   doctor = Doctor.create(
     person: person,
-    specialty: specialtiesNum.sample,
+    specialty: specialty,
     yearsExperience: [1,2,3,4,5].sample,
     salary: 10000,
-    area: areas.sample
+    area: areas[specialty]
   )
   doctors.append doctor
 end
