@@ -295,14 +295,29 @@ end
   )
   persons.append person
 
+  insurance = [0,1,2].sample
   patient = Patient.create(
     person: person,
-    insurancePlan: [0,1,2].sample
+    insurancePlan: insurance
   )
+
+  compatibleDoctors = []
+  if insurance == 0
+    compatibleDoctors = doctors.select do |doc|
+      doc.specialty == 0 || doc.specialty == 6 || doc.specialty == 7
+    end
+  elsif insurance == 1
+    compatibleDoctors = doctors.select do |doc|
+      doc.specialty != 3
+    end
+  else
+    compatibleDoctors = doctors
+  end
+
 
   treatment = Treatment.create(
     patient: patient,
-    doctor: doctors.sample,
+    doctor: compatibleDoctors.sample,
     duration: [1,2,3,7,7,7,30].sample,
     medicaments: [medicaments.sample, medicaments.sample],
     description: "take medicaments for duration"
