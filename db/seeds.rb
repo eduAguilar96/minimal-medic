@@ -250,6 +250,7 @@ persons = []
 doctors = []
 areas = []
 
+Area.delete_all
 specialtiesNum.each do |num|
   area = Area.create(
     name: specialties[num],
@@ -259,6 +260,8 @@ specialtiesNum.each do |num|
   areas.append area
 end
 
+Person.delete_all
+Doctor.delete_all
 100.times do
   person = Person.create(
     firstName: nombres.sample,
@@ -272,7 +275,7 @@ end
   doctor = Doctor.create(
     person: person,
     specialty: specialty,
-    yearsExperience: [1,2,3,4,5].sample,
+    years_experience: [1,2,3,4,5].sample,
     salary: 10000,
     area: areas[specialty]
   )
@@ -286,6 +289,8 @@ areas.each do |area|
   end
 end
 
+Patient.delete_all
+Treatment.delete_all
 500.times do
   person = Person.create(
     firstName: nombres.sample,

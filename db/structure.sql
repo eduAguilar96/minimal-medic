@@ -23,6 +23,50 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
+-- Name: doctors_after_update_row_a(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.doctors_after_update_row_a() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    IF (NEW.years_experience - OLD.years_experience >= 2) THEN
+      UPDATE doctors
+        SET salary = 1.1*(SELECT salary FROM doctors WHERE id = OLD.id)
+      WHERE id = OLD.id;
+    END IF;
+    RETURN NULL;
+END;
+$$;
+
+
+--
+-- Name: doctors_after_update_row_b(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.doctors_after_update_row_b() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+          IF (NEW.area_id != OLD.area_id AND OLD.domain_id != NULL) THEN
+            UPDATE doctors
+              SET domain_id = OLD.domain_id
+            WHERE id = (
+              SELECT id
+              FROM doctors
+              WHERE area_id = OLD.domain_id LIMIT 1
+            );
+    
+            UPDATE doctors
+              SET domain_id = NULL
+            WHERE id = OLD.id;
+          END IF;
+    RETURN NULL;
+END;
+$$;
+
+
+--
 -- Name: get_area_specialty(uuid); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -117,7 +161,7 @@ CREATE TABLE public.areas (
 CREATE TABLE public.doctors (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     specialty integer NOT NULL,
-    "yearsExperience" integer NOT NULL,
+    years_experience integer NOT NULL,
     salary numeric(64,12) NOT NULL,
     domain_id uuid,
     area_id uuid NOT NULL,
@@ -277,6 +321,20 @@ CREATE INDEX index_treatments_on_patient_id ON public.treatments USING btree (pa
 
 
 --
+-- Name: doctors doctors_after_update_row_a; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER doctors_after_update_row_a AFTER UPDATE ON public.doctors FOR EACH ROW EXECUTE PROCEDURE public.doctors_after_update_row_a();
+
+
+--
+-- Name: doctors doctors_after_update_row_b; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER doctors_after_update_row_b AFTER UPDATE ON public.doctors FOR EACH ROW EXECUTE PROCEDURE public.doctors_after_update_row_b();
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -285,6 +343,7 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20190428181243'),
 ('20190502184505'),
-('20190503042729');
+('20190503042729'),
+('20190503060016');
 
 

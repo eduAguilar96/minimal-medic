@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2019_04_28_181243) do
 
   create_table "doctors", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.integer "specialty", null: false
-    t.integer "yearsExperience", null: false
+    t.integer "years_experience", null: false
     t.decimal "salary", precision: 64, scale: 12, null: false
     t.uuid "domain_id"
     t.uuid "area_id", null: false
